@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Soundtracks Player</string>
+    <string name="choose_category">Choose the soundtrack:</string>
+    <string name="showman_activity_label">The Greatest Showman</string>
+    <string name="mamma_mia_activity_label">Mamma Mia</string>
+    <string name="lalaland_activity_label">La La Land</string>
+    <string name="phantom_activity_label">The Phantom of the Opera</string>
+    <string name="favorites_label">Favorites</string>
+    <string name="player_label">Player</string>
+    <string name="albums_song_list">The album\'s song list</string>
+</resources>

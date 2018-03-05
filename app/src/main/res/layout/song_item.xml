@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:minHeight="72dp"
+    android:descendantFocusability="blocksDescendants">
+
+    <TextView
+        android:id="@+id/tv_song_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="8dp"
+        android:text="1"
+        android:textColor="@android:color/black"/>
+
+    <LinearLayout
+        android:id="@+id/text_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:paddingLeft="16dp">
+
+        <TextView
+            android:id="@+id/tv_song_name"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="bottom"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            tools:text="This is me" />
+
+        <TextView
+            android:id="@+id/tv_singer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="top"
+            android:textSize="12sp"
+            android:textColor="@android:color/black"
+            tools:text="Keala Settle" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_song_length"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="8dp"
+        android:textColor="@android:color/black"
+        tools:text="3:12" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/img_play"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginRight="8dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_play_circle_outline_white_24dp" />
+
+    <ImageView
+        android:id="@+id/img_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginRight="8dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_pause_circle_outline_white_24dp"
+        android:visibility="invisible"/>
+    </FrameLayout>
+
+    <ImageButton
+        android:id="@+id/img_favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/ic_favorite_border_white_24dp" />
+</LinearLayout>

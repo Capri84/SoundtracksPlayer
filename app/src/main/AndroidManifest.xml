@@ -20,14 +20,8 @@
             android:name=".ShowmanActivity"
             android:label="@string/showman_activity_label" />
         <activity
-            android:name=".MammaMiaActivity"
-            android:label="@string/mamma_mia_activity_label" />
-        <activity
             android:name=".LaLaLandActivity"
             android:label="@string/lalaland_activity_label" />
-        <activity
-            android:name=".PhantomActivity"
-            android:label="@string/phantom_activity_label" />
         <activity
             android:name=".FavoritesActivity"
             android:label="@string/favorites_label" />

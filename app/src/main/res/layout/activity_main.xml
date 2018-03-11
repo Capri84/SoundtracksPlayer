@@ -39,35 +39,13 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/showman" />
 
-            <ImageButton
-                android:id="@+id/img_mamma_mia"
-                android:layout_width="0dp"
-                android:layout_height="250dp"
-                android:layout_weight="1"
-                android:scaleType="fitXY"
-                android:src="@drawable/mamma_mia_1" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-
-            <ImageButton
-                android:id="@+id/img_lalaland"
-                android:layout_width="0dp"
-                android:layout_height="250dp"
-                android:layout_weight="1"
-                android:scaleType="fitXY"
-                android:src="@drawable/lalaland" />
-
-            <ImageButton
-                android:id="@+id/img_phantom"
-                android:layout_width="0dp"
-                android:layout_height="250dp"
-                android:layout_weight="1"
-                android:scaleType="fitXY"
-                android:src="@drawable/phantom_of_the_opera" />
+        <ImageButton
+            android:id="@+id/img_lalaland"
+            android:layout_width="0dp"
+            android:layout_height="250dp"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:src="@drawable/lalaland" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

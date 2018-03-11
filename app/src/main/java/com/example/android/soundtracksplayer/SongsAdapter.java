@@ -1,8 +1,10 @@
 package com.example.android.soundtracksplayer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,22 +28,50 @@ public class SongsAdapter extends ArrayAdapter<Songs> {
         super(context, 0, songs);
     }
 
+    public static boolean isFavorite = false;
+    ArrayList<Favorites> favorites = new ArrayList<Favorites>();
+
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ViewHolder mainViewHolder = null;
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.song_item, parent, false);
             final ViewHolder viewHolder = new ViewHolder();
-            viewHolder.songNumber = (TextView) convertView.findViewById(R.id.tv_song_number);
-            viewHolder.songName = (TextView) convertView.findViewById(R.id.tv_song_name);
-            viewHolder.songSinger = (TextView) convertView.findViewById(R.id.tv_singer);
-            viewHolder.songDuration = (TextView) convertView.findViewById(R.id.tv_song_length);
-            viewHolder.favorite = (ImageButton) convertView.findViewById(R.id.img_favorite);
+            viewHolder.songNumber = convertView.findViewById(R.id.tv_song_number);
+            viewHolder.songName = convertView.findViewById(R.id.tv_song_name);
+            viewHolder.songSinger = convertView.findViewById(R.id.tv_singer);
+            viewHolder.songDuration = convertView.findViewById(R.id.tv_song_length);
+            viewHolder.favorite = convertView.findViewById(R.id.img_favorite);
             viewHolder.favorite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(), "Added to Favorites", Toast.LENGTH_SHORT).show();
+                    Songs currentItem = getItem(position);
+                    if (!isFavorite) {
+                        Toast.makeText(getContext(), "Added to Favorites", Toast.LENGTH_SHORT).show();
+                        viewHolder.favorite.setImageResource(R.drawable.ic_favorite_white_24dp);
+                        for (int i = 0; i < favorites.size(); i++) {
+                            if (!favorites.contains(currentItem)) {
+                                favorites.add(new Favorites(1, ShowmanActivity.showmanSongsList[position],
+                                        ShowmanActivity.showmanSingers[position], ShowmanActivity.showmanSongsDuration[position],
+                                        ShowmanActivity.showmanSongsIds[position]));
+                            }
+                        }
+                        Log.i("favorites", favorites.toString());
+                        isFavorite = true;
+                    } else {
+                        Toast.makeText(getContext(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
+                        viewHolder.favorite.setImageResource(R.drawable.ic_favorite_border_white_24dp);
+                        for (int i = 0; i < favorites.size(); i++) {
+                            if (!favorites.contains(currentItem)) {
+                                favorites.add(new Favorites(1, ShowmanActivity.showmanSongsList[position],
+                                        ShowmanActivity.showmanSingers[position], ShowmanActivity.showmanSongsDuration[position],
+                                        ShowmanActivity.showmanSongsIds[position]));
+                            }
+                        }
+                        Log.i("favorites", favorites.toString());
+                        isFavorite = false;
+                    }
                 }
             });
             convertView.setTag(viewHolder);
@@ -55,14 +85,4 @@ public class SongsAdapter extends ArrayAdapter<Songs> {
     }
 }
 
-   /*     if (isFavorite == false) {
-        favorite.setImageResource(R.drawable.ic_favorite_white_24dp);
-        isFavorite = true;
-        //  addToFavorites();
-        //  Log.v("showman", favorites.toString());
-        } else {
-        favorite.setImageResource(R.drawable.ic_favorite_border_white_24dp);
-        isFavorite = false;
-        //   removeFromFavorites();
-        //   Log.v("showman", favorites.toString());
-        }*/
+

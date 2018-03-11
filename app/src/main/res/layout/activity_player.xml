@@ -14,7 +14,8 @@
         <ImageView
             android:id="@+id/img_album_cover"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="15"
             tools:src="@drawable/lalaland" />
         <SeekBar
             android:id="@+id/seekbar"
@@ -32,30 +33,19 @@
         <TextView
             android:id="@+id/tv_song_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_gravity="center_horizontal"
             tools:text="This is me"/>
         <TextView
             android:id="@+id/tv_singer"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_gravity="center_horizontal"
             tools:text="Keala Settle"/>
-        <TextView
-            android:id="@+id/tv_next_song"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            tools:text="Next song:"/>
-        <TextView
-            android:id="@+id/tv_next_song_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            tools:text="Never enough"/>
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/ll_control_keys"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical"

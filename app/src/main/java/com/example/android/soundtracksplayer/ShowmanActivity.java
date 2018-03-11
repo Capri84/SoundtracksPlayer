@@ -21,55 +21,37 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static com.example.android.soundtracksplayer.R.drawable.showman;
+
 public class ShowmanActivity extends AppCompatActivity {
 
-    private String[] showmanSongsList = {"The Greatest Show", "A Million Dreams", "A Million Dreams (Reprise)",
+    public static String[] showmanSongsList = {"The Greatest Show", "A Million Dreams", "A Million Dreams (Reprise)",
             "Come Alive", "The Other Side", "Never Enough", "This Is Me", "Rewrite the Stars", "Tightrope",
             "Never Enough (Reprise)", "From Now On"};
 
-    private String[] showmanSingers = {"Hugh Jackman, Keala Settle, Zac Efron, Zendaya",
+    public static String[] showmanSingers = {"Hugh Jackman, Keala Settle, Zac Efron, Zendaya",
             "Ziv Zaifman, Hugh Jackman, Michelle Williams", "Austyn Johnson, Cameron Seely, Hugh Jackman",
             "Hugh Jackman, Keala Settle, Daniel Everidge, Zendaya", "Hugh Jackman, Zac Efron", "Loren Allred",
             "Keala Settle", "Zac Efron, Zendaya", "Michelle Williams", "Loren Allred", "Hugh Jackman"};
 
-    private String[] showmanSongsDuration = {"5:02", "4:29", "1:00", "3:45", "3:34", "3:27", "3:54", "3:37",
+    public static String[] showmanSongsDuration = {"5:02", "4:29", "1:00", "3:45", "3:34", "3:27", "3:54", "3:37",
             "3:54", "1:20", "5:49"};
 
-    public final int SHOWMAN_SONGS_AMOUNT = 11;
+    public static int[] showmanSongsIds = {R.raw.the_greatest_show, R.raw.a_million_dreams, R.raw.a_million_dreams_reprise,
+    R.raw.come_alive, R.raw.the_other_side, R.raw.never_enough, R.raw.this_is_me, R.raw.rewrite_the_stars,
+    R.raw.tightrope, R.raw.never_enough_reprise, R.raw.from_now_on};
 
-    private MediaPlayer mediaPlayer;
-    boolean isPlaying = false;
-    //ArrayList<Favorites> favorites;
-    boolean isFavorite = false;
-    ImageView play;
-    ImageView pause;
-    // ArrayList<Favorites> favorites;
-    // Button toFavorites;
+    public final static int SHOWMAN_SONGS_AMOUNT = 11;
+    public final static String SHOWMAN_ACTIVITY_TAG = "Showman";
 
-    /**
-     * This listener gets triggered when the {@link MediaPlayer} has completed
-     * playing the audio file.
-     */
-   /* private MediaPlayer.OnCompletionListener completionListener = new MediaPlayer.OnCompletionListener() {
-        @Override
-        public void onCompletion(MediaPlayer mediaPlayer) {
-            // Now that the sound file has finished playing, release the media player resources.
-            mediaPlayer.release();
-            pause.setVisibility(View.INVISIBLE);
-            play.setVisibility(View.VISIBLE);
-            isPlaying = false;
-        }
-    };*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.songs_list);
-        //  toFavorites = findViewById(R.id.btn_to_favorites);
-        //  toFavorites.setOnClickListener(this);
 
         final ArrayList<Songs> songs = new ArrayList<Songs>();
         for (int i = 0; i < SHOWMAN_SONGS_AMOUNT; i++) {
-            songs.add(new Songs(1, showmanSongsList[i], showmanSingers[i], showmanSongsDuration[i], R.raw.number_two));
+            songs.add(new Songs(i + 1, showmanSongsList[i], showmanSingers[i], showmanSongsDuration[i], showmanSongsIds[i]));
         }
         SongsAdapter songsAdapter = new SongsAdapter(this, songs);
         ListView songsList = findViewById(R.id.lv_songs_list);
@@ -77,53 +59,17 @@ public class ShowmanActivity extends AppCompatActivity {
         songsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-             Intent openPlayerIntent = new Intent(ShowmanActivity.this, PlayerActivity.class);
-             openPlayerIntent.putExtra("currentSong", showmanSongsList[position]);
-             openPlayerIntent.putExtra("currentSinger", showmanSingers[position]);
-             openPlayerIntent.putExtra("currentSongDuration", showmanSongsDuration[position]);
-             startActivity(openPlayerIntent);
-                /*   Toast.makeText(getApplicationContext(), "Item is clicked", Toast.LENGTH_SHORT).show();
-                play = view.findViewById(R.id.img_play);
-                pause = view.findViewById(R.id.img_pause);
-                if (!isPlaying) {
-                    play.setVisibility(View.INVISIBLE);
-                    pause.setVisibility(View.VISIBLE);
-                    mediaPlayer = mediaPlayer.create(ShowmanActivity.this, R.raw.number_two);
-                    mediaPlayer.start();
-                    isPlaying = true;
-                } else {
-                    pause.setVisibility(View.INVISIBLE);
-                    play.setVisibility(View.VISIBLE);
-                    mediaPlayer.pause();
-                    isPlaying = false;
-                }
-                mediaPlayer.setOnCompletionListener(completionListener);
-            }
-        });*/
+                Intent openPlayerIntent = new Intent(ShowmanActivity.this, PlayerActivity.class);
+                openPlayerIntent.putExtra("currentPosition", position);
+                openPlayerIntent.putExtra("activity", SHOWMAN_ACTIVITY_TAG);
+                startActivity(openPlayerIntent);
+                finish();
             }
 
    /*     favorites = new ArrayList<Favorites>();
         FavoritesAdapter favoritesAdapter = new FavoritesAdapter(this, favorites);
         ListView favoritesList = (ListView) findViewById(R.id.lv_songs_list);
         favoritesList.setAdapter(favoritesAdapter);
-    }*/
-
-   /*     case R.id.btn_to_favorites:
-                Intent toFavoritesIntent = new Intent(this, FavoritesActivity.class);
-                startActivity(toFavoritesIntent);
-        }
-    }
-
-    public static void addToFavorites() {
-        for (int i = 0; i < SHOWMAN_SONGS_AMOUNT; i++) {
-            SongsAdapter.favorites.add(new Favorites(1, showmanSongsList[i], showmanSingers[i], showmanSongsDuration[i], R.raw.number_two));
-        }
-    }
-
-    public static void removeFromFavorites() {
-        for (int i = 0; i < SHOWMAN_SONGS_AMOUNT; i++) {
-            SongsAdapter.favorites.remove(new Favorites(1, showmanSongsList[i], showmanSingers[i], showmanSongsDuration[i], R.raw.number_two));
-        }
     }*/
         });
     }

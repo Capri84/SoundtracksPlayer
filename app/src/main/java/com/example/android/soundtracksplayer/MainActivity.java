@@ -15,14 +15,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         //Initializing Views
         ImageView showman = findViewById(R.id.img_showman);
-        ImageView mammaMia = findViewById(R.id.img_mamma_mia);
         ImageView laLaLand = findViewById(R.id.img_lalaland);
-        ImageView phantom = findViewById(R.id.img_phantom);
         //Setting listeners to the Views
         showman.setOnClickListener(this);
-        mammaMia.setOnClickListener(this);
         laLaLand.setOnClickListener(this);
-        phantom.setOnClickListener(this);
     }
 
     @Override
@@ -32,17 +28,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent showmanActivityIntent = new Intent(this, ShowmanActivity.class);
                 startActivity(showmanActivityIntent);
                 break;
-            case R.id.img_mamma_mia:
-                Intent mammaMiaActivityIntent = new Intent(this, MammaMiaActivity.class);
-                startActivity(mammaMiaActivityIntent);
-                break;
             case R.id.img_lalaland:
                 Intent laLaLandActivityIntent = new Intent(this, LaLaLandActivity.class);
                 startActivity(laLaLandActivityIntent);
-                break;
-            case R.id.img_phantom:
-                Intent phantomActivityIntent = new Intent(this, PhantomActivity.class);
-                startActivity(phantomActivityIntent);
                 break;
         }
     }

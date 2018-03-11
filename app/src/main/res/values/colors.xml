@@ -3,6 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="logoColorPurple">#A91B7D</color>
-    <color name="logoColorOrange">#FE8E01</color>
+    <color name="logo_color_purple">#A91B7D</color>
+    <color name="logo_color_orange">#FE8E01</color>
+    <color name="listview_background">#8cffffff</color>
+    <color name="text_color">@android:color/black</color>
 </resources>

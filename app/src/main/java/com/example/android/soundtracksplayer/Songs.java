@@ -44,6 +44,6 @@ public class Songs {
     @Override
     public String toString() {
         return "Song number: " + mSongNumber + "\n Song " + mSongTitle + " performed by " +
-                mSinger + "." + "\n Song duration: " + mSongDuration;
+                mSinger + "." + "\n Song duration: " + mSongDuration + "\n Song Resource Id: " + mSongResourceId;
     }
 }

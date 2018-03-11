@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 public class LaLaLandActivity extends AppCompatActivity {
 
+    public final static String LALALAND_ACTIVITY_TAG = "LaLaLand";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

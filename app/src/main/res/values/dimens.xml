@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="tv_category_text_size">24sp</dimen>
+    <dimen name="song_item_min_height">72dp</dimen>
+    <dimen name="layout_margins">8dp</dimen>
+    <dimen name="padding_left">16dp</dimen>
 </resources>

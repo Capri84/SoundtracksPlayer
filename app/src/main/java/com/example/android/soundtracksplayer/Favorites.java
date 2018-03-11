@@ -38,4 +38,10 @@ public class Favorites {
     public int getSongResourceId() {
         return mSongResourceId;
     }
+
+    @Override
+    public String toString() {
+        return "Song number: " + mSongNumber + "\n Song " + mSongTitle + " performed by " +
+                mSinger + "." + "\n Song duration: " + mSongDuration + "\n Song Resource Id: " + mSongResourceId;
+    }
 }

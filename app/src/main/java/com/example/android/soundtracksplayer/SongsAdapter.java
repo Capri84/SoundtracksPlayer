@@ -28,7 +28,6 @@ public class SongsAdapter extends ArrayAdapter<Songs> {
         super(context, 0, songs);
     }
 
-    public static boolean isFavorite = false;
     ArrayList<Favorites> favorites = new ArrayList<Favorites>();
 
     @NonNull
@@ -47,30 +46,20 @@ public class SongsAdapter extends ArrayAdapter<Songs> {
                 @Override
                 public void onClick(View v) {
                     Songs currentItem = getItem(position);
-                    if (!isFavorite) {
+                    if (!favorites.contains(currentItem)) {
                         Toast.makeText(getContext(), "Added to Favorites", Toast.LENGTH_SHORT).show();
                         viewHolder.favorite.setImageResource(R.drawable.ic_favorite_white_24dp);
-                        for (int i = 0; i < favorites.size(); i++) {
-                            if (!favorites.contains(currentItem)) {
-                                favorites.add(new Favorites(1, ShowmanActivity.showmanSongsList[position],
-                                        ShowmanActivity.showmanSingers[position], ShowmanActivity.showmanSongsDuration[position],
-                                        ShowmanActivity.showmanSongsIds[position]));
-                            }
-                        }
-                        Log.i("favorites", favorites.toString());
-                        isFavorite = true;
-                    } else {
+                        favorites.add(new Favorites(1, ShowmanActivity.showmanSongsList[position],
+                                ShowmanActivity.showmanSingers[position], ShowmanActivity.showmanSongsDuration[position],
+                                ShowmanActivity.showmanSongsIds[position]));
+                        Log.v("favorites", favorites.toString());
+                    } else if (favorites.contains(currentItem)) {
                         Toast.makeText(getContext(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
                         viewHolder.favorite.setImageResource(R.drawable.ic_favorite_border_white_24dp);
-                        for (int i = 0; i < favorites.size(); i++) {
-                            if (!favorites.contains(currentItem)) {
-                                favorites.add(new Favorites(1, ShowmanActivity.showmanSongsList[position],
-                                        ShowmanActivity.showmanSingers[position], ShowmanActivity.showmanSongsDuration[position],
-                                        ShowmanActivity.showmanSongsIds[position]));
-                            }
+                        if (favorites.contains(currentItem)) {
+                            favorites.remove(currentItem);
+                            Log.v("favorites", favorites.toString());
                         }
-                        Log.i("favorites", favorites.toString());
-                        isFavorite = false;
                     }
                 }
             });

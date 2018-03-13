@@ -1,23 +1,18 @@
 package com.example.android.soundtracksplayer;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-
 import java.util.ArrayList;
+
+import static com.example.android.soundtracksplayer.ShowmanActivity.favorites;
 
 /**
  * Created by Capri on 01.03.2018.
@@ -27,8 +22,6 @@ public class SongsAdapter extends ArrayAdapter<Songs> {
     SongsAdapter(Context context, ArrayList<Songs> songs) {
         super(context, 0, songs);
     }
-
-    ArrayList<Favorites> favorites = new ArrayList<Favorites>();
 
     @NonNull
     @Override
@@ -46,19 +39,26 @@ public class SongsAdapter extends ArrayAdapter<Songs> {
                 @Override
                 public void onClick(View v) {
                     Songs currentItem = getItem(position);
-                    if (!favorites.contains(currentItem)) {
+                    if (favorites.size() == 0) {
+                        favorites.add(currentItem);
                         Toast.makeText(getContext(), "Added to Favorites", Toast.LENGTH_SHORT).show();
-                        viewHolder.favorite.setImageResource(R.drawable.ic_favorite_white_24dp);
-                        favorites.add(new Favorites(1, ShowmanActivity.showmanSongsList[position],
-                                ShowmanActivity.showmanSingers[position], ShowmanActivity.showmanSongsDuration[position],
-                                ShowmanActivity.showmanSongsIds[position]));
-                        Log.v("favorites", favorites.toString());
-                    } else if (favorites.contains(currentItem)) {
-                        Toast.makeText(getContext(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
-                        viewHolder.favorite.setImageResource(R.drawable.ic_favorite_border_white_24dp);
-                        if (favorites.contains(currentItem)) {
-                            favorites.remove(currentItem);
-                            Log.v("favorites", favorites.toString());
+                        viewHolder.favorite.setImageResource(R.drawable.ic_favorite_black_36dp);
+                        Log.i("favorites", favorites.toString());
+                    } else {
+                        for (int i = 0; i < favorites.size(); i++) {
+                            if (!favorites.contains(currentItem)) {
+                                favorites.add(currentItem);
+                                Toast.makeText(getContext(), "Added to Favorites", Toast.LENGTH_SHORT).show();
+                                viewHolder.favorite.setImageResource(R.drawable.ic_favorite_black_36dp);
+                                Log.i("favorites", favorites.toString());
+                                return;
+                            } else {
+                                favorites.remove(currentItem);
+                                Toast.makeText(getContext(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
+                                viewHolder.favorite.setImageResource(R.drawable.ic_favorite_border_black_36dp);
+                                Log.i("favorites", favorites.toString());
+                                return;
+                            }
                         }
                     }
                 }
@@ -73,5 +73,3 @@ public class SongsAdapter extends ArrayAdapter<Songs> {
         return convertView;
     }
 }
-
-

@@ -71,7 +71,11 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             public void onAudioFocusChange(int focusChange) {
                 switch (focusChange) {
                     case AudioManager.AUDIOFOCUS_GAIN:
-                        mediaPlayer.start();
+                        if (mediaPlayer != null) {
+                            imgBtnPlay.setVisibility(View.VISIBLE);
+                            imgBtnPause.setVisibility(View.INVISIBLE);
+                            mediaPlayer.start();
+                        }
                         break;
                     case AudioManager.AUDIOFOCUS_LOSS:
                         releaseMediaPlayer();
@@ -106,24 +110,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(this, ShowmanActivity.class));
-        releaseMediaPlayer();
-        finish();
-    }
-
     public void fillPlayerViews() {
         Intent openPlayerIntent = getIntent();
         currentPosition = openPlayerIntent.getIntExtra("currentPosition", -1);
@@ -131,22 +117,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         tvSinger.setText(ShowmanActivity.showmanSingers[currentPosition]);
         currentSongId = ShowmanActivity.showmanSongsIds[currentPosition];
         imgAlbumCover.setImageResource(R.drawable.showman);
-    }
-
-    /**
-     * Clean up the media player by releasing its resources.
-     */
-    private void releaseMediaPlayer() {
-        // If the media player is not null, then it may be currently playing a sound.
-        if (mediaPlayer != null) {
-            // Regardless of the current state of the media player, release its resources
-            // because we no longer need it.
-            mediaPlayer.release();
-            // Set the media player back to null. For our code, we've decided that
-            // setting the media player to null is an easy way to tell that the media player
-            // is not configured to play an audio file at the moment.
-            mediaPlayer = null;
-        }
     }
 
     @OnClick({R.id.img_btn_repeat_song, R.id.img_btn_previous_song, R.id.img_btn_play, R.id.img_btn_pause, R.id.img_btn_next_song, R.id.img_btn_shuffle})
@@ -171,18 +141,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 shuffleSongs();
                 break;
         }
-    }
-
-    public static int rnd(int max) {
-        return (int) (Math.random() * max);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        // When the activity is stopped, release the media player resources because we won't
-        // be playing any more sounds.
-        releaseMediaPlayer();
     }
 
     @Override
@@ -221,9 +179,9 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void pauseSong() {
+        imgBtnPause.setVisibility(View.INVISIBLE);
+        imgBtnPlay.setVisibility(View.VISIBLE);
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-            imgBtnPause.setVisibility(View.INVISIBLE);
-            imgBtnPlay.setVisibility(View.VISIBLE);
             mediaPlayer.pause();
         }
     }
@@ -306,8 +264,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             }
         }
         if (isShuffle) {
-            currentPosition = rnd(ShowmanActivity.SHOWMAN_SONGS_AMOUNT);
             releaseMediaPlayer();
+            currentPosition = rnd(ShowmanActivity.SHOWMAN_SONGS_AMOUNT);
             tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition]);
             tvSinger.setText(ShowmanActivity.showmanSingers[currentPosition]);
             mediaPlayer = mediaPlayer.create(this, ShowmanActivity.showmanSongsIds[currentPosition]);
@@ -331,14 +289,60 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             Toast.makeText(getApplicationContext(), "Shuffle is OFF", Toast.LENGTH_SHORT).show();
             imgBtnShuffle.setImageResource(R.drawable.ic_shuffle_white_36dp);
         } else {
-            // make repeat to true
+            // make shuffle to true
             isShuffle = true;
             Toast.makeText(getApplicationContext(), "Shuffle is ON", Toast.LENGTH_SHORT).show();
-            // make shuffle to false
+            // make repeat to false
             isRepeat = false;
             imgBtnShuffle.setImageResource(R.drawable.ic_shuffle_cyan_700_36dp);
             imgBtnRepeatSong.setImageResource(R.drawable.ic_repeat_white_36dp);
         }
+    }
+
+    public static int rnd(int max) {
+        return (int) (Math.random() * max);
+    }
+
+    /**
+     * Clean up the media player by releasing its resources.
+     */
+    private void releaseMediaPlayer() {
+        // If the media player is not null, then it may be currently playing a sound.
+        if (mediaPlayer != null) {
+            // Regardless of the current state of the media player, release its resources
+            // because we no longer need it.
+            mediaPlayer.release();
+            // Set the media player back to null. For our code, we've decided that
+            // setting the media player to null is an easy way to tell that the media player
+            // is not configured to play an audio file at the moment.
+            mediaPlayer = null;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // When the activity is stopped, release the media player resources because we won't
+        // be playing any more sounds.
+        releaseMediaPlayer();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, ShowmanActivity.class));
+        releaseMediaPlayer();
+        finish();
     }
 }
 

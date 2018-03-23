@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/img_album_cover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/padding_left"
+        android:layout_above="@id/ll_player_controls"
+        android:background="@drawable/border"
+        android:padding="@dimen/layout_margins"
+        android:scaleType="fitXY"
+        tools:ignore="contentDescription"
+        tools:src="@drawable/showman" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toEndOf="@id/img_album_cover"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_song_name"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="bottom|center_horizontal"
+            android:textAllCaps="true"
+            android:textColor="@color/activity_player_text_color"
+            android:textSize="@dimen/tv_category_text_size"
+            android:textStyle="bold"
+            tools:text="The Greatest Show" />
+
+        <TextView
+            android:id="@+id/tv_singer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/activity_player_singer_text_size"
+            tools:text="Hugh Jackman, Keala Settle, Zac Efron, Zendaya" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_player_controls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/player_buttons_background"
+        android:minHeight="64dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/img_btn_repeat_song"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@null"
+            android:src="@drawable/ic_repeat_white_36dp"
+            tools:ignore="contentDescription" />
+
+        <ImageButton
+            android:id="@+id/img_btn_previous_song"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@null"
+            android:src="@drawable/ic_skip_previous_white_36dp"
+            tools:ignore="contentDescription" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2">
+
+            <ImageButton
+                android:id="@+id/img_btn_play"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:src="@drawable/ic_play_circle_outline_white_48dp"
+                tools:ignore="contentDescription" />
+
+            <ImageButton
+                android:id="@+id/img_btn_pause"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:src="@drawable/ic_pause_circle_outline_white_48dp"
+                tools:ignore="contentDescription" />
+        </FrameLayout>
+
+        <ImageButton
+            android:id="@+id/img_btn_next_song"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@null"
+            android:src="@drawable/ic_skip_next_white_36dp"
+            tools:ignore="contentDescription" />
+
+        <ImageButton
+            android:id="@+id/img_btn_shuffle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@null"
+            android:src="@drawable/ic_shuffle_white_36dp"
+            tools:ignore="contentDescription" />
+    </LinearLayout>
+</RelativeLayout>

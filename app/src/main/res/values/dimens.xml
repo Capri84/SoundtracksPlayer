@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="tv_category_text_size">24sp</dimen>
+    <!-- Misc dimensions -->
     <dimen name="song_item_min_height">72dp</dimen>
+    <dimen name="song_item_img__play_height">36dp</dimen>
+    <dimen name="activity_player_view_height">2dp</dimen>
+
+
+    <!-- Margins/padding -->
     <dimen name="layout_margins">8dp</dimen>
+    <dimen name="logo_margin_top">24dp</dimen>
     <dimen name="padding_left">16dp</dimen>
+
+    <!-- Text sizes -->
+    <dimen name="tv_category_text_size">24sp</dimen>
+    <dimen name="tv_disclaimer_text_size">14sp</dimen>
+    <dimen name="tv_singer_text_size">12sp</dimen>
+    <dimen name="activity_player_singer_text_size">14sp</dimen>
 </resources>

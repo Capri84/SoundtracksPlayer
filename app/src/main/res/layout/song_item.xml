@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:descendantFocusability="blocksDescendants"
     android:minHeight="@dimen/song_item_min_height"
     android:orientation="horizontal">
 
@@ -18,11 +17,12 @@
 
     <LinearLayout
         android:id="@+id/text_container"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/padding_left">
+        android:paddingStart="@dimen/padding_left"
+        android:paddingEnd="@dimen/padding_left">
 
         <TextView
             android:id="@+id/tv_song_name"
@@ -41,7 +41,7 @@
             android:layout_weight="1"
             android:gravity="top"
             android:textColor="@android:color/black"
-            android:textSize="12sp"
+            android:textSize="@dimen/tv_singer_text_size"
             tools:text="Keala Settle" />
     </LinearLayout>
 
@@ -50,23 +50,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="@dimen/layout_margins"
         android:textColor="@android:color/black"
         tools:text="3:12" />
 
-        <ImageView
-            android:id="@+id/img_play"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="8dp"
-            android:src="@drawable/ic_play_circle_outline_black_36dp" />
-
-    <ImageButton
-        android:id="@+id/img_favorite"
+    <ImageView
+        android:id="@+id/img_play"
         android:layout_width="wrap_content"
-        android:layout_height="36dp"
+        android:layout_height="@dimen/song_item_img__play_height"
         android:layout_gravity="center_vertical"
-        android:layout_marginRight="8dp"
-        android:background="@drawable/ic_favorite_border_black_36dp" />
+        android:layout_marginEnd="@dimen/layout_margins"
+        android:src="@drawable/ic_play_circle_outline_black_36dp"
+        tools:ignore="contentDescription"/>
 </LinearLayout>

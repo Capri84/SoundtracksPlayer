@@ -7,4 +7,6 @@
     <color name="logo_color_orange">#FE8E01</color>
     <color name="listview_background">#8cffffff</color>
     <color name="text_color">@android:color/black</color>
+    <color name="activity_player_text_color">#0097A7</color>
+    <color name="player_buttons_background">#B0BEC5</color>
 </resources>

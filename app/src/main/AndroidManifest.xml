@@ -9,24 +9,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ShowmanActivity"
             android:label="@string/showman_activity_label" />
-        <activity
-            android:name=".LaLaLandActivity"
-            android:label="@string/lalaland_activity_label" />
-        <activity
-            android:name=".FavoritesActivity"
-            android:label="@string/favorites_label" />
         <activity android:name=".PlayerActivity"
-            android:label="@string/player_label"/>
+            android:label="@string/player_label"
+            android:configChanges="orientation|keyboardHidden"/>
     </application>
 
 </manifest>

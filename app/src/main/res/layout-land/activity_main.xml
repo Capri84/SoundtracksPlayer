@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:baselineAligned="false">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/img_logo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_left"
+            android:layout_marginTop="@dimen/padding_left"
+            android:src="@drawable/logo_player"
+            tools:ignore="contentDescription" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_gravity="bottom"
+            android:padding="@dimen/padding_left"
+            android:text="@string/disclaimer"
+            android:textSize="@dimen/tv_disclaimer_text_size" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_left"
+            android:layout_marginTop="@dimen/padding_left"
+            android:fontFamily="@font/tonight"
+            android:gravity="center_horizontal"
+            android:text="@string/choose_category"
+            android:textColor="@color/logo_color_orange"
+            android:textSize="@dimen/tv_category_text_size" />
+
+        <ImageButton
+            android:id="@+id/img_showman"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/border"
+            android:layout_marginBottom="@dimen/padding_left"
+            android:scaleType="fitXY"
+            android:src="@drawable/showman"
+            tools:ignore="contentDescription" />
+    </LinearLayout>
+</LinearLayout>

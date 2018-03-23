@@ -1,11 +1,8 @@
 <resources>
     <string name="app_name">Soundtracks Player</string>
-    <string name="choose_category">Choose the soundtrack:</string>
+    <string name="choose_category">Tap the soundtrack icon:</string>
     <string name="showman_activity_label">The Greatest Showman</string>
-    <string name="mamma_mia_activity_label">Mamma Mia</string>
-    <string name="lalaland_activity_label">La La Land</string>
-    <string name="phantom_activity_label">The Phantom of the Opera</string>
-    <string name="favorites_label">Favorites</string>
     <string name="player_label">Player</string>
-    <string name="albums_song_list">The album\'s song list</string>
+    <string name="disclaimer">Fragments of songs used in the app are presented for informational
+        purposes only. All rights to this music belong to its authors and a record label.</string>
 </resources>

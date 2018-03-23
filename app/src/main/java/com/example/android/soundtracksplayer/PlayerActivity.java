@@ -1,33 +1,30 @@
 package com.example.android.soundtracksplayer;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PlayerActivity extends AppCompatActivity implements View.OnClickListener, MediaPlayer.OnCompletionListener /*Runnable,
-      //  SeekBar.OnSeekBarChangeListener */ {
+public class PlayerActivity extends AppCompatActivity implements View.OnClickListener, MediaPlayer.OnCompletionListener {
 
     // UI Components
     @BindView(R.id.img_album_cover)
     ImageView imgAlbumCover;
-    @BindView(R.id.seekbar)
-    SeekBar seekbar;
-    @BindView(R.id.tv_song_duration)
-    TextView tvSongDuration;
     @BindView(R.id.tv_song_name)
     TextView tvSongName;
     @BindView(R.id.tv_singer)
@@ -50,35 +47,81 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private boolean isShuffle = false;
     private boolean isRepeat = false;
 
-    /**
-     * This listener gets triggered when the {@link MediaPlayer} has completed
-     * playing the audio file.
-     */
-  /*  private MediaPlayer.OnCompletionListener completionListener = new MediaPlayer.OnCompletionListener() {
-        @Override
-        public void onCompletion(MediaPlayer mediaPlayer) {
-            //  imgBtnPlay.setVisibility(View.VISIBLE);
-            //  imgBtnPause.setVisibility(View.INVISIBLE);
-            mediaPlayer = mediaPlayer.create(this, ShowmanActivity.showmanSongsIds[currentPosition + 1]);
-            mediaPlayer.start();
-            currentPosition++;
-            // Now that the sound file has finished playing, release the media player resources.
-            // releaseMediaPlayer();
-        }
-    };*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
         ButterKnife.bind(this);
         fillPlayerViews();
-        //Start playing the song
-        mediaPlayer = mediaPlayer.create(this, currentSongId);
-        mediaPlayer.start();
-        mediaPlayer.setOnCompletionListener(this);
-        //   seekBar.setOnSeekBarChangeListener(this);
-        //Для чего????????????????
-        //   seekBar.setEnabled(false);*/
+        // Getting access to ActionBar
+        ActionBar actionBar = getSupportActionBar();
+        //Enabling Home button
+        actionBar.setHomeButtonEnabled(true);
+        //Displaying Home button
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        // Create and setup the {@link AudioManager} to request audio focus
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+        /**
+         * This listener gets triggered whenever the audio focus changes
+         * (i.e., we gain or lose audio focus because of another app or device).
+         */
+        AudioManager.OnAudioFocusChangeListener onAudioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
+            @Override
+            public void onAudioFocusChange(int focusChange) {
+                switch (focusChange) {
+                    case AudioManager.AUDIOFOCUS_GAIN:
+                        mediaPlayer.start();
+                        break;
+                    case AudioManager.AUDIOFOCUS_LOSS:
+                        releaseMediaPlayer();
+                        break;
+                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                        mediaPlayer.pause();
+                        break;
+                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                        if (mediaPlayer != null) {
+                            mediaPlayer.pause();
+                        }
+                        break;
+                }
+            }
+        };
+
+        // Release the media player if it currently exists because we are about to
+        // play a different sound file
+        releaseMediaPlayer();
+
+        // Request audio focus in order to play the audio file.
+        int result = audioManager.requestAudioFocus(onAudioFocusChangeListener,
+                AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+
+        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+            //Start playing the song
+            imgBtnPlay.setVisibility(View.INVISIBLE);
+            imgBtnPause.setVisibility(View.VISIBLE);
+            mediaPlayer = mediaPlayer.create(this, currentSongId);
+            mediaPlayer.start();
+            mediaPlayer.setOnCompletionListener(this);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, ShowmanActivity.class));
+        releaseMediaPlayer();
+        finish();
     }
 
     public void fillPlayerViews() {
@@ -86,33 +129,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         currentPosition = openPlayerIntent.getIntExtra("currentPosition", -1);
         tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition]);
         tvSinger.setText(ShowmanActivity.showmanSingers[currentPosition]);
-        tvSongDuration.setText(ShowmanActivity.showmanSongsDuration[currentPosition]);
         currentSongId = ShowmanActivity.showmanSongsIds[currentPosition];
-        if (openPlayerIntent.getStringExtra("activity").equals(ShowmanActivity.SHOWMAN_ACTIVITY_TAG)) {
-            imgAlbumCover.setImageResource(R.drawable.showman);
-        } else if (openPlayerIntent.getStringExtra("activity").equals(LaLaLandActivity.LALALAND_ACTIVITY_TAG)) {
-            imgAlbumCover.setImageResource(R.drawable.lalaland);
-        }
-    }
-
-    /**
-     * This method identifies progress while media is playing and sets position on SeekBar
-     */
-/*    public void run() {
-        int currentPosition = mediaPlayer.getCurrentPosition();
-        int total = mediaPlayer.getDuration();
-
-        while (mediaPlayer != null && currentPosition < total) {
-            try {
-                Thread.sleep(1000);
-                currentPosition = mediaPlayer.getCurrentPosition();
-            } catch (InterruptedException e) {
-                return;
-            } catch (Exception e) {
-                return;
-            }
-            seekBar.setProgress(currentPosition);
-        }
+        imgAlbumCover.setImageResource(R.drawable.showman);
     }
 
     /**
@@ -124,15 +142,10 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             // Regardless of the current state of the media player, release its resources
             // because we no longer need it.
             mediaPlayer.release();
-
             // Set the media player back to null. For our code, we've decided that
             // setting the media player to null is an easy way to tell that the media player
             // is not configured to play an audio file at the moment.
             mediaPlayer = null;
-
-            // Regardless of whether or not we were granted audio focus, abandon it. This also
-            // unregisters the AudioFocusChangeListener so we don't get anymore callbacks.
-            // audioManager.abandonAudioFocus(mOnAudioFocusChangeListener);
         }
     }
 
@@ -140,144 +153,191 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_btn_repeat_song:
-                if (isRepeat) {
-                    isRepeat = false;
-                    Toast.makeText(getApplicationContext(), "Repeat is OFF", Toast.LENGTH_SHORT).show();
-                    //   btnRepeat.setImageResource(R.drawable.btn_repeat);
-                } else {
-                    // make repeat to true
-                    isRepeat = true;
-                    Toast.makeText(getApplicationContext(), "Repeat is ON", Toast.LENGTH_SHORT).show();
-                    // make shuffle to false
-                    isShuffle = false;
-                    //  btnRepeat.setImageResource(R.drawable.btn_repeat_focused);
-                    //  btnShuffle.setImageResource(R.drawable.btn_shuffle);
-                }
+                repeatSong();
                 break;
             case R.id.img_btn_previous_song:
-                // check if previous song is there or not
-                if (currentPosition > 0) {
-                    releaseMediaPlayer();
-                    tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition - 1]);
-                    tvSinger.setText(ShowmanActivity.showmanSingers[currentPosition - 1]);
-                    tvSongDuration.setText(ShowmanActivity.showmanSongsDuration[currentPosition - 1]);
-                    mediaPlayer = mediaPlayer.create(this, ShowmanActivity.showmanSongsIds[currentPosition - 1]);
-                    mediaPlayer.start();
-                    currentPosition--;
-                } else {
-                    // play first song
-                    releaseMediaPlayer();
-                    currentPosition = ShowmanActivity.SHOWMAN_SONGS_AMOUNT - 1;
-                    tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition]);
-                    tvSinger.setText(ShowmanActivity.showmanSingers[currentPosition]);
-                    tvSongDuration.setText(ShowmanActivity.showmanSongsDuration[currentPosition]);
-                    mediaPlayer = mediaPlayer.create(this, ShowmanActivity.showmanSongsIds[currentPosition]);
-                    mediaPlayer.start();
-                }
+                playPreviousSong();
                 break;
             case R.id.img_btn_play:
-                imgBtnPlay.setVisibility(View.INVISIBLE);
-                imgBtnPause.setVisibility(View.VISIBLE);
-                if (mediaPlayer == null) {
-                    mediaPlayer = mediaPlayer.create(this, ShowmanActivity.showmanSongsIds[currentPosition]);
-                    mediaPlayer.start();
-                } else {
-                    mediaPlayer.start();
-                }
-                //     mediaPlayer.setOnCompletionListener(completionListener);
+                playSong();
                 break;
             case R.id.img_btn_pause:
-                if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-                    imgBtnPause.setVisibility(View.INVISIBLE);
-                    imgBtnPlay.setVisibility(View.VISIBLE);
-                    mediaPlayer.pause();
-                }
+                pauseSong();
                 break;
             case R.id.img_btn_next_song:
-                // check if next song is there or not
-                if (currentPosition < (ShowmanActivity.SHOWMAN_SONGS_AMOUNT - 1)) {
-                    releaseMediaPlayer();
-                    tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition + 1]);
-                    tvSinger.setText(ShowmanActivity.showmanSingers[currentPosition + 1]);
-                    tvSongDuration.setText(ShowmanActivity.showmanSongsDuration[currentPosition + 1]);
-                    mediaPlayer = mediaPlayer.create(this, ShowmanActivity.showmanSongsIds[currentPosition + 1]);
-                    mediaPlayer.start();
-                    currentPosition++;
-                } else {
-                    // play first song
-                    releaseMediaPlayer();
-                    currentPosition = 0;
-                    tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition]);
-                    tvSinger.setText(ShowmanActivity.showmanSingers[currentPosition]);
-                    tvSongDuration.setText(ShowmanActivity.showmanSongsDuration[currentPosition]);
-                    mediaPlayer = mediaPlayer.create(this, ShowmanActivity.showmanSongsIds[currentPosition]);
-                    mediaPlayer.start();
-                }
+                playNextSong();
                 break;
             case R.id.img_btn_shuffle:
-                if (isShuffle) {
-                    isShuffle = false;
-                    Toast.makeText(getApplicationContext(), "Shuffle is OFF", Toast.LENGTH_SHORT).show();
-                    //  btnShuffle.setImageResource(R.drawable.btn_shuffle);
-                } else {
-                    // make repeat to true
-                    isShuffle = true;
-                    Toast.makeText(getApplicationContext(), "Shuffle is ON", Toast.LENGTH_SHORT).show();
-                    // make shuffle to false
-                    isRepeat = false;
-                    //  btnShuffle.setImageResource(R.drawable.btn_shuffle_focused);
-                    //  btnRepeat.setImageResource(R.drawable.btn_repeat);
-                }
+                shuffleSongs();
                 break;
         }
     }
 
+    public static int rnd(int max) {
+        return (int) (Math.random() * max);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // When the activity is stopped, release the media player resources because we won't
+        // be playing any more sounds.
+        releaseMediaPlayer();
+    }
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
-        imgBtnPlay.setVisibility(View.VISIBLE);
-        imgBtnPause.setVisibility(View.INVISIBLE);
-        // check for repeat is ON or OFF
-        if (isRepeat) {
-            // repeat is on, play same song again
-            tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition]);
-            tvSinger.setText(ShowmanActivity.showmanSingers[currentPosition]);
-            tvSongDuration.setText(ShowmanActivity.showmanSongsDuration[currentPosition]);
-            mediaPlayer = mediaPlayer.create(this, ShowmanActivity.showmanSongsIds[currentPosition]);
+        releaseMediaPlayer();
+        // no repeat or shuffle ON, play next song
+        if (currentPosition < (ShowmanActivity.SHOWMAN_SONGS_AMOUNT - 1)) {
+            tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition + 1]);
+            tvSinger.setText(ShowmanActivity.showmanSingers[currentPosition + 1]);
+            mediaPlayer = mediaPlayer.create(this, ShowmanActivity.showmanSongsIds[currentPosition + 1]);
             mediaPlayer.start();
-            imgBtnPlay.setVisibility(View.INVISIBLE);
-            imgBtnPause.setVisibility(View.VISIBLE);
-        } else if (isShuffle) {
-            // shuffle is on, play a random song
-            Random rand = new Random();
-            currentPosition = rand.nextInt((ShowmanActivity.SHOWMAN_SONGS_AMOUNT - 1) - 0 + 1) + 0;
-            tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition]);
-            tvSinger.setText(ShowmanActivity.showmanSingers[currentPosition]);
-            tvSongDuration.setText(ShowmanActivity.showmanSongsDuration[currentPosition]);
-            mediaPlayer = mediaPlayer.create(this, ShowmanActivity.showmanSongsIds[currentPosition]);
-            mediaPlayer.start();
-            imgBtnPlay.setVisibility(View.INVISIBLE);
-            imgBtnPause.setVisibility(View.VISIBLE);
+            currentPosition++;
+            mediaPlayer.setOnCompletionListener(this);
         } else {
-            // no repeat or shuffle ON, play next song
+            // play first song
+            currentPosition = 0;
+            tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition]);
+            tvSinger.setText(ShowmanActivity.showmanSingers[currentPosition]);
+            mediaPlayer = mediaPlayer.create(this, ShowmanActivity.showmanSongsIds[currentPosition]);
+            mediaPlayer.start();
+            mediaPlayer.setOnCompletionListener(this);
+        }
+    }
+
+    private void playSong() {
+        imgBtnPlay.setVisibility(View.INVISIBLE);
+        imgBtnPause.setVisibility(View.VISIBLE);
+        if (mediaPlayer == null) {
+            mediaPlayer = mediaPlayer.create(this, ShowmanActivity.showmanSongsIds[currentPosition]);
+            mediaPlayer.start();
+            mediaPlayer.setOnCompletionListener(this);
+        } else {
+            mediaPlayer.start();
+            mediaPlayer.setOnCompletionListener(this);
+        }
+    }
+
+    private void pauseSong() {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            imgBtnPause.setVisibility(View.INVISIBLE);
+            imgBtnPlay.setVisibility(View.VISIBLE);
+            mediaPlayer.pause();
+        }
+    }
+
+    private void repeatSong() {
+        if (isRepeat) {
+            isRepeat = false;
+            Toast.makeText(getApplicationContext(), "Repeat is OFF", Toast.LENGTH_SHORT).show();
+            imgBtnRepeatSong.setImageResource(R.drawable.ic_repeat_white_36dp);
+            mediaPlayer.setLooping(false);
+        } else {
+            // make repeat to true
+            isRepeat = true;
+            Toast.makeText(getApplicationContext(), "Repeat is ON", Toast.LENGTH_SHORT).show();
+            // make shuffle to false
+            isShuffle = false;
+            imgBtnRepeatSong.setImageResource(R.drawable.ic_repeat_cyan_700_36dp);
+            imgBtnShuffle.setImageResource(R.drawable.ic_shuffle_white_36dp);
+            try {
+                mediaPlayer.setLooping(true);
+            } catch (NullPointerException e) {
+            }
+        }
+    }
+
+    private void playPreviousSong() {
+        if (imgBtnPlay.getVisibility() == View.VISIBLE) {
+            imgBtnPlay.setVisibility(View.INVISIBLE);
+            imgBtnPause.setVisibility(View.VISIBLE);
+        }
+        if (isRepeat) {
+            isRepeat = false;
+            Toast.makeText(getApplicationContext(), "Repeat is OFF", Toast.LENGTH_SHORT).show();
+            imgBtnRepeatSong.setImageResource(R.drawable.ic_repeat_white_36dp);
+        }
+        // check if previous song is there or not
+        if (currentPosition > 0) {
+            releaseMediaPlayer();
+            tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition - 1]);
+            tvSinger.setText(ShowmanActivity.showmanSingers[currentPosition - 1]);
+            mediaPlayer = mediaPlayer.create(this, ShowmanActivity.showmanSongsIds[currentPosition - 1]);
+            mediaPlayer.start();
+            currentPosition--;
+        } else {
+            // play first song
+            releaseMediaPlayer();
+            currentPosition = ShowmanActivity.SHOWMAN_SONGS_AMOUNT - 1;
+            tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition]);
+            tvSinger.setText(ShowmanActivity.showmanSingers[currentPosition]);
+            mediaPlayer = mediaPlayer.create(this, ShowmanActivity.showmanSongsIds[currentPosition]);
+            mediaPlayer.start();
+        }
+    }
+
+    private void playNextSong() {
+        if (imgBtnPlay.getVisibility() == View.VISIBLE) {
+            imgBtnPlay.setVisibility(View.INVISIBLE);
+            imgBtnPause.setVisibility(View.VISIBLE);
+        }
+        if (isRepeat) {
+            isRepeat = false;
+            Toast.makeText(getApplicationContext(), "Repeat is OFF", Toast.LENGTH_SHORT).show();
+            imgBtnRepeatSong.setImageResource(R.drawable.ic_repeat_white_36dp);
+            // check if next song is there or not
             if (currentPosition < (ShowmanActivity.SHOWMAN_SONGS_AMOUNT - 1)) {
+                releaseMediaPlayer();
                 tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition + 1]);
                 tvSinger.setText(ShowmanActivity.showmanSingers[currentPosition + 1]);
-                tvSongDuration.setText(ShowmanActivity.showmanSongsDuration[currentPosition + 1]);
                 mediaPlayer = mediaPlayer.create(this, ShowmanActivity.showmanSongsIds[currentPosition + 1]);
                 mediaPlayer.start();
                 currentPosition++;
             } else {
                 // play first song
+                releaseMediaPlayer();
                 currentPosition = 0;
                 tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition]);
                 tvSinger.setText(ShowmanActivity.showmanSingers[currentPosition]);
-                tvSongDuration.setText(ShowmanActivity.showmanSongsDuration[currentPosition]);
                 mediaPlayer = mediaPlayer.create(this, ShowmanActivity.showmanSongsIds[currentPosition]);
                 mediaPlayer.start();
             }
-            // Now that the sound file has finished playing, release the media player resources.
+        }
+        if (isShuffle) {
+            currentPosition = rnd(ShowmanActivity.SHOWMAN_SONGS_AMOUNT);
             releaseMediaPlayer();
+            tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition]);
+            tvSinger.setText(ShowmanActivity.showmanSingers[currentPosition]);
+            mediaPlayer = mediaPlayer.create(this, ShowmanActivity.showmanSongsIds[currentPosition]);
+            mediaPlayer.start();
+        } else {
+            currentPosition++;
+            if (currentPosition > ShowmanActivity.SHOWMAN_SONGS_AMOUNT - 1) {
+                currentPosition = 0;
+            }
+            releaseMediaPlayer();
+            tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition]);
+            tvSinger.setText(ShowmanActivity.showmanSingers[currentPosition]);
+            mediaPlayer = mediaPlayer.create(this, ShowmanActivity.showmanSongsIds[currentPosition]);
+            mediaPlayer.start();
+        }
+    }
+
+    private void shuffleSongs() {
+        if (isShuffle) {
+            isShuffle = false;
+            Toast.makeText(getApplicationContext(), "Shuffle is OFF", Toast.LENGTH_SHORT).show();
+            imgBtnShuffle.setImageResource(R.drawable.ic_shuffle_white_36dp);
+        } else {
+            // make repeat to true
+            isShuffle = true;
+            Toast.makeText(getApplicationContext(), "Shuffle is ON", Toast.LENGTH_SHORT).show();
+            // make shuffle to false
+            isRepeat = false;
+            imgBtnShuffle.setImageResource(R.drawable.ic_shuffle_cyan_700_36dp);
+            imgBtnRepeatSong.setImageResource(R.drawable.ic_repeat_white_36dp);
         }
     }
 }

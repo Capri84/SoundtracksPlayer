@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+
 import java.util.ArrayList;
 
 /**
@@ -18,14 +19,13 @@ public class SongsAdapter extends ArrayAdapter<Songs> {
     SongsAdapter(Context context, ArrayList<Songs> songs) {
         super(context, 0, songs);
     }
+
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull final ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.song_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.song_item, parent, false);
         }
-        convertView = LayoutInflater.from(getContext()).inflate(R.layout.song_item, parent, false);
         final ViewHolder viewHolder = new ViewHolder();
         viewHolder.songNumber = convertView.findViewById(R.id.tv_song_number);
         viewHolder.songName = convertView.findViewById(R.id.tv_song_name);

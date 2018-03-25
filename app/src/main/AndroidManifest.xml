@@ -17,7 +17,8 @@
         </activity>
         <activity
             android:name=".ShowmanActivity"
-            android:label="@string/showman_activity_label" />
+            android:label="@string/showman_activity_label"
+            android:screenOrientation="portrait"/>
         <activity android:name=".PlayerActivity"
             android:label="@string/player_label"
             android:screenOrientation="portrait" />

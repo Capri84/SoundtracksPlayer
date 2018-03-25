@@ -2,13 +2,11 @@ package com.example.android.soundtracksplayer;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -62,10 +60,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         // Create and setup the {@link AudioManager} to request audio focus
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
-        /**
-         * This listener gets triggered whenever the audio focus changes
-         * (i.e., we gain or lose audio focus because of another app or device).
-         */
+        // This listener gets triggered whenever the audio focus changes.
         AudioManager.OnAudioFocusChangeListener onAudioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
             @Override
             public void onAudioFocusChange(int focusChange) {
@@ -92,8 +87,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             }
         };
 
-        // Release the media player if it currently exists because we are about to
-        // play a different sound file
+        // Release the media player
         releaseMediaPlayer();
 
         // Request audio focus in order to play the audio file.
@@ -110,6 +104,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    // Fill the components of the Activity with the proper information.
     public void fillPlayerViews() {
         Intent openPlayerIntent = getIntent();
         currentPosition = openPlayerIntent.getIntExtra("currentPosition", -1);
@@ -119,7 +114,9 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         imgAlbumCover.setImageResource(R.drawable.showman);
     }
 
-    @OnClick({R.id.img_btn_repeat_song, R.id.img_btn_previous_song, R.id.img_btn_play, R.id.img_btn_pause, R.id.img_btn_next_song, R.id.img_btn_shuffle})
+    // This method describes the actions performed by the buttons of the player when they are pressed.
+    @OnClick({R.id.img_btn_repeat_song, R.id.img_btn_previous_song, R.id.img_btn_play, R.id.img_btn_pause,
+            R.id.img_btn_next_song, R.id.img_btn_shuffle})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_btn_repeat_song:
@@ -143,10 +140,12 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    // This method describes the actions to be performed upon completion of the song's playback.
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
+        // Release the media player
         releaseMediaPlayer();
-        // no repeat or shuffle ON, play next song
+        // If the current song is not the last in the list, play the next song
         if (currentPosition < (ShowmanActivity.SHOWMAN_SONGS_AMOUNT - 1)) {
             tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition + 1]);
             tvSinger.setText(ShowmanActivity.showmanSingers[currentPosition + 1]);
@@ -155,7 +154,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             currentPosition++;
             mediaPlayer.setOnCompletionListener(this);
         } else {
-            // play first song
+            // If the current song is the last in the list, play the first song
             currentPosition = 0;
             tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition]);
             tvSinger.setText(ShowmanActivity.showmanSingers[currentPosition]);
@@ -165,6 +164,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    // This method describes the actions performed when the Play button is pressed.
     private void playSong() {
         imgBtnPlay.setVisibility(View.INVISIBLE);
         imgBtnPause.setVisibility(View.VISIBLE);
@@ -178,6 +178,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    // This method describes the actions performed when the Pause button is pressed.
     private void pauseSong() {
         imgBtnPause.setVisibility(View.INVISIBLE);
         imgBtnPlay.setVisibility(View.VISIBLE);
@@ -186,6 +187,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    // This method describes the actions performed when the Repeat button is pressed.
     private void repeatSong() {
         if (isRepeat) {
             isRepeat = false;
@@ -207,6 +209,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    // This method describes the actions performed when the Previous button is pressed.
     private void playPreviousSong() {
         if (imgBtnPlay.getVisibility() == View.VISIBLE) {
             imgBtnPlay.setVisibility(View.INVISIBLE);
@@ -217,7 +220,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             Toast.makeText(getApplicationContext(), "Repeat is OFF", Toast.LENGTH_SHORT).show();
             imgBtnRepeatSong.setImageResource(R.drawable.ic_repeat_white_36dp);
         }
-        // check if previous song is there or not
+        // Check if the previous song is there or not, and if it is then play it
         if (currentPosition > 0) {
             releaseMediaPlayer();
             tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition - 1]);
@@ -226,7 +229,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             mediaPlayer.start();
             currentPosition--;
         } else {
-            // play first song
             releaseMediaPlayer();
             currentPosition = ShowmanActivity.SHOWMAN_SONGS_AMOUNT - 1;
             tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition]);
@@ -236,6 +238,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    // This method describes the actions performed when the Next button is pressed.
     private void playNextSong() {
         if (imgBtnPlay.getVisibility() == View.VISIBLE) {
             imgBtnPlay.setVisibility(View.INVISIBLE);
@@ -245,7 +248,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             isRepeat = false;
             Toast.makeText(getApplicationContext(), "Repeat is OFF", Toast.LENGTH_SHORT).show();
             imgBtnRepeatSong.setImageResource(R.drawable.ic_repeat_white_36dp);
-            // check if next song is there or not
+            // Check if the next song is there or not, and if it is then play it
             if (currentPosition < (ShowmanActivity.SHOWMAN_SONGS_AMOUNT - 1)) {
                 releaseMediaPlayer();
                 tvSongName.setText(ShowmanActivity.showmanSongsList[currentPosition + 1]);
@@ -283,6 +286,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    // This method describes the actions performed when the Shuffle button is pressed.
     private void shuffleSongs() {
         if (isShuffle) {
             isShuffle = false;
@@ -303,9 +307,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         return (int) (Math.random() * max);
     }
 
-    /**
-     * Clean up the media player by releasing its resources.
-     */
+    // Clean up the media player by releasing its resources.
     private void releaseMediaPlayer() {
         // If the media player is not null, then it may be currently playing a sound.
         if (mediaPlayer != null) {

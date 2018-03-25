@@ -1,24 +1,14 @@
 package com.example.android.soundtracksplayer;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
-import java.util.Set;
 
 public class ShowmanActivity extends AppCompatActivity {
 
@@ -39,7 +29,6 @@ public class ShowmanActivity extends AppCompatActivity {
             R.raw.tightrope, R.raw.never_enough_reprise, R.raw.from_now_on};
 
     public final static int SHOWMAN_SONGS_AMOUNT = 11;
-    public final static String SHOWMAN_ACTIVITY_TAG = "Showman";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +42,10 @@ public class ShowmanActivity extends AppCompatActivity {
         //Displaying Home button
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        final ArrayList<Songs> songs = new ArrayList<Songs>();
+        final ArrayList<Songs> songs = new ArrayList<>();
         for (int i = 0; i < SHOWMAN_SONGS_AMOUNT; i++) {
-            songs.add(new Songs(i + 1, showmanSongsList[i], showmanSingers[i], showmanSongsDuration[i], showmanSongsIds[i]));
+            songs.add(new Songs(i + 1, showmanSongsList[i], showmanSingers[i],
+                    showmanSongsDuration[i], showmanSongsIds[i]));
         }
 
         SongsAdapter songsAdapter = new SongsAdapter(this, songs);
@@ -66,16 +56,9 @@ public class ShowmanActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent openPlayerIntent = new Intent(ShowmanActivity.this, PlayerActivity.class);
                 openPlayerIntent.putExtra("currentPosition", position);
-                openPlayerIntent.putExtra("activity", SHOWMAN_ACTIVITY_TAG);
                 startActivity(openPlayerIntent);
                 finish();
             }
-
-   /*     favorites = new ArrayList<Favorites>();
-        FavoritesAdapter favoritesAdapter = new FavoritesAdapter(this, favorites);
-        ListView favoritesList = (ListView) findViewById(R.id.lv_songs_list);
-        favoritesList.setAdapter(favoritesAdapter);
-    }*/
         });
     }
 

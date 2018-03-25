@@ -1,7 +1,5 @@
 package com.example.android.soundtracksplayer;
 
-import android.widget.ImageButton;
-
 /**
  * Created by Capri on 28.02.2018.
  */
@@ -13,7 +11,7 @@ public class Songs {
     private String mSongDuration;
     private int mSongResourceId;
 
-    public Songs(int songNumber, String songTitle, String singer, String songDuration, int songResourceId) {
+    Songs(int songNumber, String songTitle, String singer, String songDuration, int songResourceId) {
         mSongNumber = songNumber;
         mSongTitle = songTitle;
         mSinger = singer;
@@ -21,19 +19,19 @@ public class Songs {
         mSongResourceId = songResourceId;
     }
 
-    public int getSongNumber() {
+    int getSongNumber() {
         return mSongNumber;
     }
 
-    public String getSongTitle() {
+    String getSongTitle() {
         return mSongTitle;
     }
 
-    public String getSinger() {
+    String getSinger() {
         return mSinger;
     }
 
-    public String getSongDuration() {
+    String getSongDuration() {
         return mSongDuration;
     }
 

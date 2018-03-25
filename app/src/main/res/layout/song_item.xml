@@ -21,8 +21,8 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:paddingStart="@dimen/padding_left"
-        android:paddingEnd="@dimen/padding_left">
+        android:paddingEnd="@dimen/padding_left"
+        android:paddingStart="@dimen/padding_left">
 
         <TextView
             android:id="@+id/tv_song_name"
@@ -61,5 +61,5 @@
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="@dimen/layout_margins"
         android:src="@drawable/ic_play_circle_outline_black_36dp"
-        tools:ignore="contentDescription"/>
+        tools:ignore="contentDescription" />
 </LinearLayout>
